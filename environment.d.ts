@@ -8,5 +8,8 @@ declare namespace NodeJS {
     DB_PASSWORD?: string;
 
     ORIGIN?: string;
+
+    GOOGLE_CLIENT_ID?: string;
+    GOOGLE_SECRET?: string;
   }
 }
