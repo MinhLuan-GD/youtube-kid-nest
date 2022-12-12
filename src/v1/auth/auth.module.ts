@@ -3,8 +3,11 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { Services } from 'src/utils/constants';
 import { GoogleStrategy } from './utils/google.strategy';
+import { UsersModule } from '../users/users.module';
+import { SessionSerializer } from './utils/serializer';
 
 @Module({
+  imports: [UsersModule],
   controllers: [AuthController],
   providers: [
     {
@@ -12,6 +15,7 @@ import { GoogleStrategy } from './utils/google.strategy';
       useClass: AuthService,
     },
     GoogleStrategy,
+    SessionSerializer,
   ],
 })
 export class AuthModule {}
