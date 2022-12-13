@@ -19,7 +19,7 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Res() res: Response) {
-    return res.redirect('/api/v1/auth/status');
+    return res.redirect(`${process.env.BASE_URL}/login/success`);
   }
 
   @Get('status')
