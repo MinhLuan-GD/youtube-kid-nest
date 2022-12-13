@@ -1,6 +1,6 @@
 import { UserDetails } from 'src/utils/types';
 
-export interface IUsersServices {
+export interface IUsersService {
   validateUser(details: UserDetails);
   findUser(id: string);
   createChildren(body: any, userId: string);

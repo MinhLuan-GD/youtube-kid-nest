@@ -3,12 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 import { Services } from 'src/utils/constants';
 import { User } from 'src/v1/users/schemas/user.schema';
-import { IUsersServices } from 'src/v1/users/users';
+import { IUsersService } from 'src/v1/users/users';
 
 @Injectable()
 export class SessionSerializer extends PassportSerializer {
   constructor(
-    @Inject(Services.USERS) private readonly usersService: IUsersServices,
+    @Inject(Services.USERS) private readonly usersService: IUsersService,
   ) {
     super();
   }

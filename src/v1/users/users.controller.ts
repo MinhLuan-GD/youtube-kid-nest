@@ -1,12 +1,12 @@
 import { Body, Controller, Inject, Param, Patch, Post } from '@nestjs/common';
 import { Delete, Get } from '@nestjs/common/decorators';
 import { Routes, Services } from 'src/utils/constants';
-import { IUsersServices } from './users';
+import { IUsersService } from './users';
 
 @Controller({ version: '1', path: Routes.USERS })
 export class UsersController {
   constructor(
-    @Inject(Services.USERS) private readonly usersService: IUsersServices,
+    @Inject(Services.USERS) private readonly usersService: IUsersService,
   ) {}
 
   @Post(':userId/childrens')
