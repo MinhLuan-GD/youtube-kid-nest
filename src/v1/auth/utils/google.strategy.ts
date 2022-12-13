@@ -12,7 +12,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: 'http://localhost:8000/api/v1/auth/redirect',
+      callbackURL: '/api/v1/auth/google/callback',
       scope: ['email', 'profile'],
     });
   }
@@ -23,6 +23,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: any,
   ): Promise<any> {
     const user = await this.usersService.validateUser({
+      google_id: profile.id,
       email: profile.emails[0].value,
       name: profile.displayName,
       picture: profile.photos[0].value,

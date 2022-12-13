@@ -1,5 +1,5 @@
-import { Controller, Get, Inject, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Get, Inject, Req, Res, UseGuards } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { Routes, Services } from 'src/utils/constants';
 import { IAuthService } from './auth';
 import { GoogleAuthGuard } from './utils/Guards';
@@ -10,16 +10,16 @@ export class AuthController {
     @Inject(Services.AUTH) private readonly authService: IAuthService,
   ) {}
 
-  @Get()
+  @Get('google')
   @UseGuards(GoogleAuthGuard)
   async googleAuth() {
     return 'Google Oauth';
   }
 
-  @Get('redirect')
+  @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect() {
-    return 'Ok';
+  googleAuthRedirect(@Res() res: Response) {
+    return res.redirect('/api/v1/auth/status');
   }
 
   @Get('status')
@@ -28,5 +28,23 @@ export class AuthController {
       return 'Authenticated';
     }
     return 'Unauthenticated';
+  }
+
+  @Get('success')
+  success(@Req() req: Request) {
+    if (req.user) {
+      return {
+        success: true,
+        message: 'successful',
+        user: req.user,
+      };
+    }
+    return 'Unauthenticated';
+  }
+
+  @Get('logout')
+  logout(@Req() req: Request, @Res() res: Response) {
+    req.logout(() => ({}));
+    return res.redirect(`${process.env.BASE_URL}/login`);
   }
 }

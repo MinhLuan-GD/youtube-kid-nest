@@ -3,6 +3,8 @@ import { Video, VideoSchema } from './video.schema';
 
 @Schema()
 export class Children {
+  _id: string;
+
   @Prop({ default: '' })
   name: string;
 
@@ -21,8 +23,11 @@ export class Children {
   @Prop({ default: '' })
   picture: string;
 
-  @Prop({ default: new Video(), type: [VideoSchema] })
+  @Prop({ default: [], type: [VideoSchema] })
   videos: Video[];
+
+  @Prop({ default: [], type: [VideoSchema] })
+  historyWatchVideo: Video[];
 }
 
 export const ChildrenSchema = SchemaFactory.createForClass(Children);

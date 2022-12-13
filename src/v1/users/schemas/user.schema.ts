@@ -7,6 +7,9 @@ export type UserDocument = User & Document;
 @Schema({ collection: 'users', timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
+  google_id: string;
+
+  @Prop({ default: '' })
   email: string;
 
   @Prop({ default: '' })
@@ -18,7 +21,7 @@ export class User {
   @Prop({ default: '' })
   picture: string;
 
-  @Prop({ default: new Children(), type: [ChildrenSchema] })
+  @Prop({ default: [], type: [ChildrenSchema] })
   childrens: Children[];
 
   createdAt: Date;
