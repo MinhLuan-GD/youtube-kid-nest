@@ -23,4 +23,5 @@ export interface IUsersService {
   listChildrens(userId: string);
   addVideoForChildren(userId: string, childrenId: string, video: any);
   removeVideoForChildren(userId: string, childrenId: string, videoId: string);
+  updateSecretPassword(userId: string, password: string);
 }

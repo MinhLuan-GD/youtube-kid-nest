@@ -16,42 +16,42 @@ export class ChatService implements IChatService {
       .lean();
   }
 
-  getChatMessages(videoId: string) {
-    return this.chatModel.findOne({ video_id: videoId }).lean();
+  async getChatMessages(videoId: string) {
+    const chat = await this.chatModel.findOne({ video_id: videoId }).lean();
+    return chat.messages;
   }
 
-  addMessageChat(chatId: string, data: any) {
-    return this.chatModel
+  async addMessageChat(chatId: string, data: any) {
+    const chat = await this.chatModel
       .findOneAndUpdate(
         { _id: chatId },
         { $push: { messages: data } },
         { new: true },
       )
       .lean();
+    return chat.messages;
   }
 
-  updateMessageChat(chatId: string, messageId: string, data: any) {
+  async updateMessageChat(chatId: string, messageId: string, data: any) {
     const { name, picture, text } = data;
-    this.chatModel.findOneAndUpdate(
+    const chat = await this.chatModel.findOneAndUpdate(
       { _id: chatId, 'messages._id': messageId },
       {
         'messages.$.name': name,
         'messages.$.picture': picture,
         'messages.$.text': text,
       },
-      {},
-      () => ({}),
+      { new: true },
     );
-    return 'ok';
+    return chat.messages;
   }
 
-  deleteMessageChat(chatId: string, messageId: any) {
-    this.chatModel.findOneAndUpdate(
+  async deleteMessageChat(chatId: string, messageId: any) {
+    const chat = await this.chatModel.findOneAndUpdate(
       { _id: chatId },
       { $pull: { messages: { _id: messageId } } },
-      {},
-      () => ({}),
+      { new: true },
     );
-    return 'ok';
+    return chat.messages;
   }
 }

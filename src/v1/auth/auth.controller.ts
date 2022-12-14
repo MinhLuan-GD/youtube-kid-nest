@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Routes, Services } from 'src/utils/constants';
 import { IAuthService } from './auth';
-import { GoogleAuthGuard } from './utils/Guards';
+import { GoogleAuthGuard } from 'src/v1/auth/utils/guards';
 
 @Controller({ version: '1', path: Routes.AUTH })
 export class AuthController {

@@ -92,4 +92,9 @@ export class UsersController {
       body.videoId,
     );
   }
+
+  @Patch(':userId/update-secret-password')
+  updateSecretPassword(@Body() body, @Param() par) {
+    return this.usersService.updateSecretPassword(par.userId, body.password);
+  }
 }

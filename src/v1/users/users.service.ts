@@ -25,17 +25,18 @@ export class UsersService implements IUsersService {
     return this.usersModel.findById(id).lean();
   }
 
-  async createChildren(body: any, userId: string) {
-    const user = await this.usersModel.findOneAndUpdate(
-      { google_id: userId },
-      {
-        $push: {
-          childrens: body,
+  createChildren(body: any, userId: string) {
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId },
+        {
+          $push: {
+            childrens: body,
+          },
         },
-      },
-      { new: true },
-    );
-    return user.childrens[user.childrens.length - 1];
+        { new: true },
+      )
+      .lean();
   }
 
   async getChildren(userId: string, childrenId: string) {
@@ -48,17 +49,17 @@ export class UsersService implements IUsersService {
     childrenId: string,
     secretPassword: string,
   ) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $set: {
-          'childrens.$.secret_password': secretPassword,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $set: {
+            'childrens.$.secret_password': secretPassword,
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   updateContentSettingChildren(
@@ -66,91 +67,91 @@ export class UsersService implements IUsersService {
     childrenId: string,
     contentSetting: string,
   ) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $set: {
-          'childrens.$.content_settings': contentSetting,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $set: {
+            'childrens.$.content_settings': contentSetting,
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   addVideoHistory(userId: string, childrenId: string, video: any) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $push: {
-          'childrens.$.historyWatchVideo': video,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $push: {
+            'childrens.$.historyWatchVideo': video,
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   clearVideosHistory(userId: string, childrenId: string) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $set: {
-          'childrens.$.historyWatchVideo': [],
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $set: {
+            'childrens.$.historyWatchVideo': [],
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   updateChildrenForChildren(userId: string, childrenId: string, data: any) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $set: {
-          'childrens.$.name': data.name,
-          'childrens.$.picture': data.picture,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $set: {
+            'childrens.$.name': data.name,
+            'childrens.$.picture': data.picture,
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   updateChildrenForParent(userId: string, childrenId: string, data: any) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $set: {
-          'childrens.$.name': data.name,
-          'childrens.$.picture': data.picture,
-          'childrens.$.year': data.year,
-          'childrens.$.month': data.month,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $set: {
+            'childrens.$.name': data.name,
+            'childrens.$.picture': data.picture,
+            'childrens.$.year': data.year,
+            'childrens.$.month': data.month,
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   deleteChildren(userId: string, childrenId: string) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId },
-      {
-        $pull: {
-          childrens: { _id: childrenId },
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId },
+        {
+          $pull: {
+            childrens: { _id: childrenId },
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   async listChildrens(userId: string) {
@@ -159,32 +160,46 @@ export class UsersService implements IUsersService {
   }
 
   addVideoForChildren(userId: string, childrenId: string, video: any) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $push: {
-          'childrens.$.videos': video,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $push: {
+            'childrens.$.videos': video,
+          },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
   }
 
   removeVideoForChildren(userId: string, childrenId: string, videoId: string) {
-    this.usersModel.findOneAndUpdate(
-      { google_id: userId, 'childrens._id': childrenId },
-      {
-        $pull: {
-          'childrens.$.videos': {
-            videoId,
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId, 'childrens._id': childrenId },
+        {
+          $pull: {
+            'childrens.$.videos': {
+              videoId,
+            },
           },
         },
-      },
-      {},
-      () => ({}),
-    );
-    return 'ok';
+        { new: true },
+      )
+      .lean();
+  }
+
+  updateSecretPassword(userId: string, password: string) {
+    return this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId },
+        {
+          $set: {
+            secret_password: password,
+          },
+        },
+        { new: true },
+      )
+      .lean();
   }
 }
