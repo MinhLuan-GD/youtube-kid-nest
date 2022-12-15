@@ -25,8 +25,8 @@ export class UsersService implements IUsersService {
     return this.usersModel.findById(id).lean();
   }
 
-  createChildren(body: any, userId: string) {
-    return this.usersModel
+  async createChildren(body: any, userId: string) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId },
         {
@@ -37,6 +37,7 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
   async getChildren(userId: string, childrenId: string) {
@@ -44,12 +45,12 @@ export class UsersService implements IUsersService {
     return user.childrens.find((c) => c._id == childrenId);
   }
 
-  updateSecretPasswordChildren(
+  async updateSecretPasswordChildren(
     userId: string,
     childrenId: string,
     secretPassword: string,
   ) {
-    return this.usersModel
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -60,14 +61,15 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
-  updateContentSettingChildren(
+  async updateContentSettingChildren(
     userId: string,
     childrenId: string,
     contentSetting: string,
   ) {
-    return this.usersModel
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -78,10 +80,11 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
-  addVideoHistory(userId: string, childrenId: string, video: any) {
-    return this.usersModel
+  async addVideoHistory(userId: string, childrenId: string, video: any) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -92,10 +95,11 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
-  clearVideosHistory(userId: string, childrenId: string) {
-    return this.usersModel
+  async clearVideosHistory(userId: string, childrenId: string) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -106,10 +110,15 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
-  updateChildrenForChildren(userId: string, childrenId: string, data: any) {
-    return this.usersModel
+  async updateChildrenForChildren(
+    userId: string,
+    childrenId: string,
+    data: any,
+  ) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -121,10 +130,11 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
-  updateChildrenForParent(userId: string, childrenId: string, data: any) {
-    return this.usersModel
+  async updateChildrenForParent(userId: string, childrenId: string, data: any) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -138,6 +148,7 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
   deleteChildren(userId: string, childrenId: string) {
@@ -159,8 +170,8 @@ export class UsersService implements IUsersService {
     return user.childrens;
   }
 
-  addVideoForChildren(userId: string, childrenId: string, video: any) {
-    return this.usersModel
+  async addVideoForChildren(userId: string, childrenId: string, video: any) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -171,10 +182,15 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
-  removeVideoForChildren(userId: string, childrenId: string, videoId: string) {
-    return this.usersModel
+  async removeVideoForChildren(
+    userId: string,
+    childrenId: string,
+    videoId: string,
+  ) {
+    const user = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -187,6 +203,7 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+    return user.childrens[user.childrens.length - 1];
   }
 
   updateSecretPassword(userId: string, password: string) {

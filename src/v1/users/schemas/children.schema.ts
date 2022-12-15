@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Video, VideoSchema } from './video.schema';
+import { VideoHistory, VideoHistorySchema } from './videoHistory.schema';
 
 @Schema()
 export class Children {
@@ -26,8 +27,8 @@ export class Children {
   @Prop({ default: [], type: [VideoSchema] })
   videos: Video[];
 
-  @Prop({ default: [], type: [VideoSchema] })
-  historyWatchVideo: Video[];
+  @Prop({ default: [], type: [VideoHistorySchema] })
+  historyWatchVideo: VideoHistory[];
 }
 
 export const ChildrenSchema = SchemaFactory.createForClass(Children);
