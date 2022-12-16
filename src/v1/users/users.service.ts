@@ -9,6 +9,7 @@ import {
   ModifyChildrenForParentDetails,
   UserDetails,
 } from 'src/utils/types';
+import { Children } from './schemas/children.schema';
 import { User, UserDocument } from './schemas/user.schema';
 import { IUsersService } from './users';
 
@@ -17,7 +18,8 @@ export class UsersService implements IUsersService {
   constructor(
     @InjectModel(User.name) private readonly usersModel: Model<UserDocument>,
   ) {}
-  validateUser(details: UserDetails) {
+
+  async validateUser(details: UserDetails): Promise<User> {
     const { google_id, email, name, picture } = details;
     return this.usersModel
       .findOneAndUpdate(
@@ -28,11 +30,14 @@ export class UsersService implements IUsersService {
       .lean();
   }
 
-  findUser(id: string) {
+  async findUser(id: string): Promise<User> {
     return this.usersModel.findById(id).lean();
   }
 
-  async createChildren(body: CreateChildrenDetails, userId: string) {
+  async createChildren(
+    body: CreateChildrenDetails,
+    userId: string,
+  ): Promise<Children> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId },
@@ -47,7 +52,7 @@ export class UsersService implements IUsersService {
     return childrens[childrens.length - 1];
   }
 
-  async getChildren(userId: string, childrenId: string) {
+  async getChildren(userId: string, childrenId: string): Promise<Children> {
     const { childrens }: User = await this.usersModel
       .findOne({
         google_id: userId,
@@ -60,7 +65,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     secretPassword: string,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -82,7 +87,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     contentSetting: string,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -104,7 +109,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     video: CreateVideoHistoryDetails,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -122,7 +127,10 @@ export class UsersService implements IUsersService {
     };
   }
 
-  async clearVideosHistory(userId: string, childrenId: string) {
+  async clearVideosHistory(
+    userId: string,
+    childrenId: string,
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -144,7 +152,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     data: ModifyChildrenForChildrenDetails,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -167,7 +175,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     data: ModifyChildrenForParentDetails,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -188,7 +196,7 @@ export class UsersService implements IUsersService {
     };
   }
 
-  deleteChildren(userId: string, childrenId: string) {
+  async deleteChildren(userId: string, childrenId: string): Promise<User> {
     return this.usersModel
       .findOneAndUpdate(
         { google_id: userId },
@@ -202,7 +210,7 @@ export class UsersService implements IUsersService {
       .lean();
   }
 
-  async listChildrens(userId: string) {
+  async listChildrens(userId: string): Promise<Children[]> {
     const { childrens }: User = await this.usersModel
       .findOne({ google_id: userId })
       .lean();
@@ -213,7 +221,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     video: CreateVideoForChildrenDetails,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -235,7 +243,7 @@ export class UsersService implements IUsersService {
     userId: string,
     childrenId: string,
     videoId: string,
-  ) {
+  ): Promise<{ children: Children; childrens: Children[] }> {
     const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
@@ -255,7 +263,7 @@ export class UsersService implements IUsersService {
     };
   }
 
-  updateSecretPassword(userId: string, password: string) {
+  async updateSecretPassword(userId: string, password: string): Promise<User> {
     return this.usersModel
       .findOneAndUpdate(
         { google_id: userId },

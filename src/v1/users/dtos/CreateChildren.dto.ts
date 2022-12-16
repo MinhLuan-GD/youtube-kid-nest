@@ -10,7 +10,6 @@ export class CreateChildrenDto {
   year: string;
 
   @IsString()
-  @IsNotEmpty()
   month: string;
 
   @IsString()

@@ -10,7 +10,6 @@ export class CreateVideoForChildrenDto {
   thumbnail: string;
 
   @IsString()
-  @IsNotEmpty()
   title: string;
 
   @IsString()

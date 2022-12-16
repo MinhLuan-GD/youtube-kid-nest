@@ -6,63 +6,71 @@ import {
   ModifyChildrenForParentDetails,
   UserDetails,
 } from 'src/utils/types';
+import { Children } from './schemas/children.schema';
+import { User } from './schemas/user.schema';
 
 export interface IUsersService {
-  validateUser(details: UserDetails): any;
+  validateUser(details: UserDetails): Promise<User>;
 
-  findUser(id: string): any;
+  findUser(id: string): Promise<User>;
 
-  createChildren(body: CreateChildrenDetails, userId: string): any;
+  createChildren(
+    body: CreateChildrenDetails,
+    userId: string,
+  ): Promise<Children>;
 
-  getChildren(userId: string, childrenId: string): any;
+  getChildren(userId: string, childrenId: string): Promise<Children>;
 
   updateSecretPasswordChildren(
     userId: string,
     childrenId: string,
     secretPassword: string,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
   updateContentSettingChildren(
     userId: string,
     childrenId: string,
     contentSetting: string,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
   addVideoHistory(
     userId: string,
     childrenId: string,
     video: CreateVideoHistoryDetails,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
-  clearVideosHistory(userId: string, childrenId: string): any;
+  clearVideosHistory(
+    userId: string,
+    childrenId: string,
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
   updateChildrenForChildren(
     userId: string,
     childrenId: string,
     data: ModifyChildrenForChildrenDetails,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
   updateChildrenForParent(
     userId: string,
     childrenId: string,
     data: ModifyChildrenForParentDetails,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
-  deleteChildren(userId: string, childrenId: string): any;
+  deleteChildren(userId: string, childrenId: string): Promise<User>;
 
-  listChildrens(userId: string): any;
+  listChildrens(userId: string): Promise<Children[]>;
 
   addVideoForChildren(
     userId: string,
     childrenId: string,
     video: CreateVideoForChildrenDetails,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
   removeVideoForChildren(
     userId: string,
     childrenId: string,
     videoId: string,
-  ): any;
+  ): Promise<{ children: Children; childrens: Children[] }>;
 
-  updateSecretPassword(userId: string, password: string): any;
+  updateSecretPassword(userId: string, password: string): Promise<User>;
 }
