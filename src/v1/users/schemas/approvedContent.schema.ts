@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ _id: false })
-export class Video {
+export class ApprovedContent {
   @Prop({ default: '' })
   videoId: string;
 
@@ -15,4 +15,5 @@ export class Video {
   type: string;
 }
 
-export const VideoSchema = SchemaFactory.createForClass(Video);
+export const ApprovedContentSchema =
+  SchemaFactory.createForClass(ApprovedContent);
