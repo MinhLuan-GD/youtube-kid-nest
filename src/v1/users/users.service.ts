@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDetails } from 'src/utils/types';
+import {
+  CreateChildrenDetails,
+  CreateVideoForChildrenDetails,
+  CreateVideoHistoryDetails,
+  ModifyChildrenForChildrenDetails,
+  ModifyChildrenForParentDetails,
+  UserDetails,
+} from 'src/utils/types';
 import { User, UserDocument } from './schemas/user.schema';
 import { IUsersService } from './users';
 
@@ -25,8 +32,8 @@ export class UsersService implements IUsersService {
     return this.usersModel.findById(id).lean();
   }
 
-  async createChildren(body: any, userId: string) {
-    const { childrens } = await this.usersModel
+  async createChildren(body: CreateChildrenDetails, userId: string) {
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId },
         {
@@ -41,7 +48,11 @@ export class UsersService implements IUsersService {
   }
 
   async getChildren(userId: string, childrenId: string) {
-    const { childrens } = await this.usersModel.findOne({ google_id: userId });
+    const { childrens }: User = await this.usersModel
+      .findOne({
+        google_id: userId,
+      })
+      .lean();
     return childrens.find((c) => c._id == childrenId);
   }
 
@@ -50,7 +61,7 @@ export class UsersService implements IUsersService {
     childrenId: string,
     secretPassword: string,
   ) {
-    const { childrens } = await this.usersModel
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -72,7 +83,7 @@ export class UsersService implements IUsersService {
     childrenId: string,
     contentSetting: string,
   ) {
-    const { childrens } = await this.usersModel
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -89,8 +100,12 @@ export class UsersService implements IUsersService {
     };
   }
 
-  async addVideoHistory(userId: string, childrenId: string, video: any) {
-    const { childrens } = await this.usersModel
+  async addVideoHistory(
+    userId: string,
+    childrenId: string,
+    video: CreateVideoHistoryDetails,
+  ) {
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -108,7 +123,7 @@ export class UsersService implements IUsersService {
   }
 
   async clearVideosHistory(userId: string, childrenId: string) {
-    const { childrens } = await this.usersModel
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -128,9 +143,9 @@ export class UsersService implements IUsersService {
   async updateChildrenForChildren(
     userId: string,
     childrenId: string,
-    data: any,
+    data: ModifyChildrenForChildrenDetails,
   ) {
-    const { childrens } = await this.usersModel
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -148,8 +163,12 @@ export class UsersService implements IUsersService {
     };
   }
 
-  async updateChildrenForParent(userId: string, childrenId: string, data: any) {
-    const { childrens } = await this.usersModel
+  async updateChildrenForParent(
+    userId: string,
+    childrenId: string,
+    data: ModifyChildrenForParentDetails,
+  ) {
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -184,12 +203,18 @@ export class UsersService implements IUsersService {
   }
 
   async listChildrens(userId: string) {
-    const user = await this.usersModel.findOne({ google_id: userId });
-    return user.childrens;
+    const { childrens }: User = await this.usersModel
+      .findOne({ google_id: userId })
+      .lean();
+    return childrens;
   }
 
-  async addVideoForChildren(userId: string, childrenId: string, video: any) {
-    const { childrens } = await this.usersModel
+  async addVideoForChildren(
+    userId: string,
+    childrenId: string,
+    video: CreateVideoForChildrenDetails,
+  ) {
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {
@@ -211,7 +236,7 @@ export class UsersService implements IUsersService {
     childrenId: string,
     videoId: string,
   ) {
-    const { childrens } = await this.usersModel
+    const { childrens }: User = await this.usersModel
       .findOneAndUpdate(
         { google_id: userId, 'childrens._id': childrenId },
         {

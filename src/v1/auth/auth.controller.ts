@@ -1,15 +1,10 @@
-import { Controller, Get, Inject, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Routes, Services } from 'src/utils/constants';
-import { IAuthService } from './auth';
+import { Routes } from 'src/utils/constants';
 import { GoogleAuthGuard } from 'src/v1/auth/utils/guards';
 
 @Controller({ version: '1', path: Routes.AUTH })
 export class AuthController {
-  constructor(
-    @Inject(Services.AUTH) private readonly authService: IAuthService,
-  ) {}
-
   @Get('google')
   @UseGuards(GoogleAuthGuard)
   async googleAuth() {

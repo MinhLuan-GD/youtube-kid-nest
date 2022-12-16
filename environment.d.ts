@@ -13,5 +13,7 @@ declare namespace NodeJS {
 
     GOOGLE_CLIENT_ID?: string;
     GOOGLE_SECRET?: string;
+
+    SESSION_SECRET?: string;
   }
 }

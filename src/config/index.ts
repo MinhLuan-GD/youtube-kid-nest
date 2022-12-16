@@ -1,8 +1,7 @@
-import { MongooseModuleOptions } from '@nestjs/mongoose';
 import session from 'express-session';
 
 export const sessionOpt: session.SessionOptions = {
-  secret: 'luan',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: false,
   cookie: {

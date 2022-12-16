@@ -1,6 +1,11 @@
 import { Body, Controller, Inject, Param, Patch, Post } from '@nestjs/common';
 import { Delete, Get } from '@nestjs/common/decorators';
 import { Routes, Services } from 'src/utils/constants';
+import { CreateChildrenDto } from './dtos/CreateChildren.dto';
+import { CreateVideoForChildrenDto } from './dtos/CreateVideoForChildren.dto';
+import { CreateVideoHistoryDto } from './dtos/CreateVideoHistory.dto';
+import { ModifyChildrenForChildrenDto } from './dtos/ModifyChildrenForChildren.dto';
+import { ModifyChildrenForParentDto } from './dtos/ModifyChildrenForParent.dto';
 import { IUsersService } from './users';
 
 @Controller({ version: '1', path: Routes.USERS })
@@ -10,17 +15,23 @@ export class UsersController {
   ) {}
 
   @Post(':userId/childrens')
-  createChildren(@Body() body, @Param('userId') userId: string) {
+  createChildren(
+    @Body() body: CreateChildrenDto,
+    @Param('userId') userId: string,
+  ) {
     return this.usersService.createChildren(body, userId);
   }
 
   @Get(':userId/childrens/:childrenId')
-  getChildren(@Param() par) {
+  getChildren(@Param() par: any) {
     return this.usersService.getChildren(par.userId, par.childrenId);
   }
 
   @Patch(':userId/childrens/:childrenId/update-password')
-  updateSecretPasswordChildren(@Body() body, @Param() par) {
+  updateSecretPasswordChildren(
+    @Body() body: { secretPassword: string },
+    @Param() par: any,
+  ) {
     return this.usersService.updateSecretPasswordChildren(
       par.userId,
       par.childrenId,
@@ -29,7 +40,10 @@ export class UsersController {
   }
 
   @Patch(':userId/childrens/:childrenId/update-content')
-  updateContentSettingChildren(@Body() body, @Param() par) {
+  updateContentSettingChildren(
+    @Body() body: { contentSetting: string },
+    @Param() par: any,
+  ) {
     return this.usersService.updateContentSettingChildren(
       par.userId,
       par.childrenId,
@@ -38,17 +52,20 @@ export class UsersController {
   }
 
   @Patch(':userId/childrens/:childrenId/add-video-history')
-  addVideoHistory(@Body() body, @Param() par) {
+  addVideoHistory(@Body() body: CreateVideoHistoryDto, @Param() par: any) {
     return this.usersService.addVideoHistory(par.userId, par.childrenId, body);
   }
 
   @Patch(':userId/childrens/:childrenId/clear-videos-history')
-  clearVideosHistory(@Param() par) {
+  clearVideosHistory(@Param() par: any) {
     return this.usersService.clearVideosHistory(par.userId, par.childrenId);
   }
 
   @Patch(':userId/childrens/:childrenId/for-child')
-  updateChildrenForChildren(@Body() body, @Param() par) {
+  updateChildrenForChildren(
+    @Body() body: ModifyChildrenForChildrenDto,
+    @Param() par: any,
+  ) {
     return this.usersService.updateChildrenForChildren(
       par.userId,
       par.childrenId,
@@ -57,7 +74,10 @@ export class UsersController {
   }
 
   @Patch(':userId/childrens/:childrenId/for-parent')
-  updateChildrenForParent(@Body() body, @Param() par) {
+  updateChildrenForParent(
+    @Body() body: ModifyChildrenForParentDto,
+    @Param() par: any,
+  ) {
     return this.usersService.updateChildrenForParent(
       par.userId,
       par.childrenId,
@@ -66,17 +86,20 @@ export class UsersController {
   }
 
   @Delete(':userId/childrens/:childrenId')
-  deleteChildren(@Param() par) {
+  deleteChildren(@Param() par: any) {
     return this.usersService.deleteChildren(par.userId, par.childrenId);
   }
 
   @Get(':userId/childrens')
-  listChildrens(@Param() par) {
+  listChildrens(@Param() par: any) {
     return this.usersService.listChildrens(par.userId);
   }
 
   @Patch(':userId/childrens/:childrenId/add-video')
-  addVideoForChildren(@Body() body, @Param() par) {
+  addVideoForChildren(
+    @Body() body: CreateVideoForChildrenDto,
+    @Param() par: any,
+  ) {
     return this.usersService.addVideoForChildren(
       par.userId,
       par.childrenId,
@@ -85,7 +108,7 @@ export class UsersController {
   }
 
   @Patch(':userId/childrens/:childrenId/remove-video')
-  removeVideoForChildren(@Body() body, @Param() par) {
+  removeVideoForChildren(@Body() body: { videoId: string }, @Param() par: any) {
     return this.usersService.removeVideoForChildren(
       par.userId,
       par.childrenId,
@@ -94,7 +117,7 @@ export class UsersController {
   }
 
   @Patch(':userId/update-secret-password')
-  updateSecretPassword(@Body() body, @Param() par) {
+  updateSecretPassword(@Body() body: { password: string }, @Param() par: any) {
     return this.usersService.updateSecretPassword(par.userId, body.password);
   }
 }

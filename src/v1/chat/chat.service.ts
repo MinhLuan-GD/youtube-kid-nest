@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UpdateMessageChatDetails } from 'src/utils/types';
 import { IChatService } from './chat';
 import { Chat, ChatDocument } from './schemas/chat.schema';
 
@@ -17,41 +18,51 @@ export class ChatService implements IChatService {
   }
 
   async getChatMessages(videoId: string) {
-    const chat = await this.chatModel.findOne({ video_id: videoId }).lean();
-    return chat.messages;
+    const { messages }: Chat = await this.chatModel
+      .findOne({ video_id: videoId })
+      .lean();
+    return messages;
   }
 
-  async addMessageChat(chatId: string, data: any) {
-    const chat = await this.chatModel
+  async addMessageChat(chatId: string, data: UpdateMessageChatDetails) {
+    const { messages }: Chat = await this.chatModel
       .findOneAndUpdate(
         { _id: chatId },
         { $push: { messages: data } },
         { new: true },
       )
       .lean();
-    return chat.messages;
+    return messages;
   }
 
-  async updateMessageChat(chatId: string, messageId: string, data: any) {
+  async updateMessageChat(
+    chatId: string,
+    messageId: string,
+    data: UpdateMessageChatDetails,
+  ) {
     const { name, picture, text } = data;
-    const chat = await this.chatModel.findOneAndUpdate(
-      { _id: chatId, 'messages._id': messageId },
-      {
-        'messages.$.name': name,
-        'messages.$.picture': picture,
-        'messages.$.text': text,
-      },
-      { new: true },
-    );
-    return chat.messages;
+    const { messages }: Chat = await this.chatModel
+      .findOneAndUpdate(
+        { _id: chatId, 'messages._id': messageId },
+        {
+          'messages.$.name': name,
+          'messages.$.picture': picture,
+          'messages.$.text': text,
+        },
+        { new: true },
+      )
+      .lean();
+    return messages;
   }
 
-  async deleteMessageChat(chatId: string, messageId: any) {
-    const chat = await this.chatModel.findOneAndUpdate(
-      { _id: chatId },
-      { $pull: { messages: { _id: messageId } } },
-      { new: true },
-    );
-    return chat.messages;
+  async deleteMessageChat(chatId: string, messageId: string) {
+    const { messages }: Chat = await this.chatModel
+      .findOneAndUpdate(
+        { _id: chatId },
+        { $pull: { messages: { _id: messageId } } },
+        { new: true },
+      )
+      .lean();
+    return messages;
   }
 }
