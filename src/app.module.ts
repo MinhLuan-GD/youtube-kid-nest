@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { ScheduleModule } from '@nestjs/schedule';
 import { V1Module } from './v1/v1.module';
 
 @Module({
@@ -18,6 +19,7 @@ import { V1Module } from './v1/v1.module';
       family: 4,
     }),
     PassportModule.register({ session: true }),
+    ScheduleModule.forRoot(),
     V1Module,
   ],
 })

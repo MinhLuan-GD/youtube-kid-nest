@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   CreateChildrenDetails,
+  CreateSubscriptionDetails,
   CreateVideoForChildrenDetails,
   CreateVideoHistoryDetails,
   ModifyChildrenForChildrenDetails,
   ModifyChildrenForParentDetails,
+  UpdateKidActivityDetails,
   UserDetails,
 } from 'src/utils/types';
 import { Children } from './schemas/children.schema';
@@ -275,5 +277,285 @@ export class UsersService implements IUsersService {
         { new: true },
       )
       .lean();
+  }
+
+  async setTimeExpire(userId: string, childrenId: string): Promise<Children> {
+    const findExpire = await this.usersModel
+      .findOne({ google_id: userId })
+      .lean();
+    if (
+      findExpire.childrens.some((c) => c._id == childrenId && c.timeExpire <= 0)
+    ) {
+      throw new HttpException('conflict', HttpStatus.CONFLICT);
+    }
+    const user: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $inc: {
+            'childrens.$.timeExpire': -1,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return user.childrens.find(({ _id }) => _id == childrenId);
+  }
+
+  reSetTimeExpire(): void {
+    this.usersModel.updateMany(
+      {},
+      {
+        $set: {
+          'childrens.$[].timeExpire': 60,
+        },
+      },
+      { multi: true },
+      () => ({}),
+    );
+    return;
+  }
+
+  async updateKidActivity(
+    userId: string,
+    childrenId: string,
+    data: UpdateKidActivityDetails,
+  ): Promise<User> {
+    const user = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'kids_activity.childrenId': childrenId,
+        },
+        {
+          $set: {
+            'kids_activity.$.name': data.name,
+            'kids_activity.$.picture': data.picture,
+            'kids_activity.$.type': data.type,
+            'kids_activity.$.activity': data.activity,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+
+    if (!user) {
+      return this.usersModel
+        .findOneAndUpdate(
+          { google_id: userId },
+          {
+            $push: {
+              kids_activity: { childrenId, ...data },
+            },
+          },
+          { new: true },
+        )
+        .lean();
+    }
+
+    return user;
+  }
+
+  async blockVideo(
+    userId: string,
+    childrenId: string,
+    videoId: string,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $push: {
+            'childrens.$.block_video': videoId,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async clearBlockVideo(
+    userId: string,
+    childrenId: string,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $set: {
+            'childrens.$.block_video': [],
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async updateAllowSearch(
+    userId: string,
+    childrenId: string,
+    allowSearch: boolean,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $set: {
+            'childrens.$.allow_search': allowSearch,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async subscribeChannel(
+    userId: string,
+    childrenId: string,
+    data: CreateSubscriptionDetails,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $push: {
+            'childrens.$.subscriptions': data,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async unsubscribeChannel(
+    userId: string,
+    childrenId: string,
+    channelId: string,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $pull: {
+            'childrens.$.subscriptions': {
+              channelId,
+            },
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async blockChannel(
+    userId: string,
+    childrenId: string,
+    channelId: string,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $push: {
+            'childrens.$.block_channel': channelId,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async clearBlockChannel(
+    userId: string,
+    childrenId: string,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $set: {
+            'childrens.$.block_channel': [],
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
+  }
+
+  async updateAllowChat(
+    userId: string,
+    childrenId: string,
+    allowChat: boolean,
+  ): Promise<{ children: Children; childrens: Children[] }> {
+    const { childrens }: User = await this.usersModel
+      .findOneAndUpdate(
+        {
+          google_id: userId,
+          'childrens._id': childrenId,
+        },
+        {
+          $set: {
+            'childrens.$.allow_chat': allowChat,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return {
+      children: childrens.find(({ _id }) => _id == childrenId),
+      childrens,
+    };
   }
 }

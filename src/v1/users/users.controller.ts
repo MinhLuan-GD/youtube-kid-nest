@@ -1,11 +1,23 @@
-import { Body, Controller, Inject, Param, Patch, Post } from '@nestjs/common';
-import { Delete, Get } from '@nestjs/common/decorators';
+import {
+  Get,
+  Post,
+  Put,
+  Patch,
+  Delete,
+  Inject,
+  Controller,
+  Body,
+  Param,
+} from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { Routes, Services } from 'src/utils/constants';
 import { CreateChildrenDto } from './dtos/CreateChildren.dto';
+import { CreateSubscriptionDto } from './dtos/CreateSubscription.dto';
 import { CreateVideoForChildrenDto } from './dtos/CreateVideoForChildren.dto';
 import { CreateVideoHistoryDto } from './dtos/CreateVideoHistory.dto';
 import { ModifyChildrenForChildrenDto } from './dtos/ModifyChildrenForChildren.dto';
 import { ModifyChildrenForParentDto } from './dtos/ModifyChildrenForParent.dto';
+import { UpdateKidActivityDto } from './dtos/UpdateKidActivity.dto';
 import { IUsersService } from './users';
 
 @Controller({ version: '1', path: Routes.USERS })
@@ -119,5 +131,90 @@ export class UsersController {
   @Patch(':userId/update-secret-password')
   updateSecretPassword(@Body() body: { password: string }, @Param() par: any) {
     return this.usersService.updateSecretPassword(par.userId, body.password);
+  }
+
+  @Patch(':userId/childrens/:childrenId/set-time-expire')
+  setTimeExpire(@Param() par: any) {
+    return this.usersService.setTimeExpire(par.userId, par.childrenId);
+  }
+
+  @Cron('0 0 0 * * *')
+  reSetTimeExpire() {
+    return this.usersService.reSetTimeExpire();
+  }
+
+  @Put(':userId/kid-activity/:childrenId')
+  updateKidActivity(@Param() par: any, @Body() body: UpdateKidActivityDto) {
+    return this.usersService.updateKidActivity(
+      par.userId,
+      par.childrenId,
+      body,
+    );
+  }
+
+  @Patch(':userId/childrens/:childrenId/block-video')
+  blockVideo(@Param() par: any, @Body('videoId') videoId: string) {
+    return this.usersService.blockVideo(par.userId, par.childrenId, videoId);
+  }
+
+  @Patch(':userId/childrens/:childrenId/clear-block-video')
+  clearBlockVideo(@Param() par: any) {
+    return this.usersService.clearBlockVideo(par.userId, par.childrenId);
+  }
+
+  @Patch(':userId/childrens/:childrenId/block-search')
+  blockSearch(@Param() par: any) {
+    return this.usersService.updateAllowSearch(
+      par.userId,
+      par.childrenId,
+      false,
+    );
+  }
+
+  @Patch(':userId/childrens/:childrenId/allow-search')
+  allowSearch(@Param() par: any) {
+    return this.usersService.updateAllowSearch(
+      par.userId,
+      par.childrenId,
+      true,
+    );
+  }
+
+  @Post(':userId/childrens/:childrenId/subscriptions')
+  subscribeChannel(@Param() par: any, @Body() body: CreateSubscriptionDto) {
+    return this.usersService.subscribeChannel(par.userId, par.childrenId, body);
+  }
+
+  @Delete(':userId/childrens/:childrenId/subscriptions/:channelId')
+  unsubscribeChannel(@Param() par: any) {
+    return this.usersService.unsubscribeChannel(
+      par.userId,
+      par.childrenId,
+      par.channelId,
+    );
+  }
+
+  @Patch(':userId/childrens/:childrenId/block-channel')
+  blockChannel(@Param() par: any, @Body('channelId') channelId: string) {
+    return this.usersService.blockChannel(
+      par.userId,
+      par.childrenId,
+      channelId,
+    );
+  }
+
+  @Patch(':userId/childrens/:childrenId/clear-block-channel')
+  clearBlockChannel(@Param() par: any) {
+    return this.usersService.clearBlockChannel(par.userId, par.childrenId);
+  }
+
+  @Patch(':userId/childrens/:childrenId/block-chat')
+  blockChat(@Param() par: any) {
+    return this.usersService.updateAllowChat(par.userId, par.childrenId, false);
+  }
+
+  @Patch(':userId/childrens/:childrenId/allow-chat')
+  allowChat(@Param() par: any) {
+    return this.usersService.updateAllowChat(par.userId, par.childrenId, true);
   }
 }
