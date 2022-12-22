@@ -14,7 +14,7 @@ export class KidActivity {
 
   @Prop({
     default: 'video',
-    enum: ['video', 'search', 'profile', 'channel', 'chat'],
+    enum: ['video', 'search', 'profile', 'channel', 'chat', 'secret_key'],
   })
   type: string;
 

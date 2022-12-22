@@ -9,6 +9,7 @@ import {
   UserDetails,
 } from 'src/utils/types';
 import { Children } from './schemas/children.schema';
+import { KidActivity } from './schemas/kidActivity.schema';
 import { User } from './schemas/user.schema';
 
 export interface IUsersService {
@@ -141,4 +142,6 @@ export interface IUsersService {
     childrenId: string,
     allowChat: boolean,
   ): Promise<{ children: Children; childrens: Children[] }>;
+
+  getKidsActivity(userId: string): Promise<KidActivity[]>;
 }

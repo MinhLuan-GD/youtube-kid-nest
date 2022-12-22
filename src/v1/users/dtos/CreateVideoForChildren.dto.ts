@@ -7,12 +7,18 @@ export class CreateVideoForChildrenDto {
 
   @IsString()
   @IsNotEmpty()
+  channelId: string;
+
+  @IsString()
+  @IsNotEmpty()
   thumbnail: string;
 
   @IsString()
   title: string;
 
+  // @IsString()
+  // @IsNotEmpty()
+  // type: string;
   @IsString()
-  @IsNotEmpty()
-  type: string;
+  duration: string;
 }

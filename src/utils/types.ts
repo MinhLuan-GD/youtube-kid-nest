@@ -15,15 +15,18 @@ export type CreateChildrenDetails = {
 
 export type CreateVideoForChildrenDetails = {
   videoId: string;
+  channelId: string;
   thumbnail: string;
   title: string;
-  type: string;
+  duration: string;
 };
 
 export type CreateVideoHistoryDetails = {
   videoId: string;
+  channelId: string;
   thumbnail: string;
   title: string;
+  duration: string;
 };
 
 export type ModifyChildrenForChildrenDetails = {

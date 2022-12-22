@@ -217,4 +217,9 @@ export class UsersController {
   allowChat(@Param() par: any) {
     return this.usersService.updateAllowChat(par.userId, par.childrenId, true);
   }
+
+  @Get(':userId/kids-activity')
+  getKidsActivity(@Param() par: any) {
+    return this.usersService.getKidsActivity(par.userId);
+  }
 }

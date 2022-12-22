@@ -34,8 +34,8 @@ export class Children {
   @Prop({ default: [], type: [VideoHistorySchema] })
   historyWatchVideo: VideoHistory[];
 
-  // @Prop({ default: true })
-  // setTime: boolean;
+  @Prop({ default: 0 })
+  timeCountDown: number;
 
   @Prop({ default: 60 })
   timeExpire: number;

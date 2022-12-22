@@ -12,6 +12,7 @@ import {
   UserDetails,
 } from 'src/utils/types';
 import { Children } from './schemas/children.schema';
+import { KidActivity } from './schemas/kidActivity.schema';
 import { User, UserDocument } from './schemas/user.schema';
 import { IUsersService } from './users';
 
@@ -557,5 +558,12 @@ export class UsersService implements IUsersService {
       children: childrens.find(({ _id }) => _id == childrenId),
       childrens,
     };
+  }
+
+  async getKidsActivity(userId: string): Promise<KidActivity[]> {
+    const { kids_activity }: User = await this.usersModel.findOne({
+      google_id: userId,
+    });
+    return kids_activity;
   }
 }
