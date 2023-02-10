@@ -12,6 +12,7 @@ import {
 import { Cron } from '@nestjs/schedule';
 import { Routes, Services } from 'src/utils/constants';
 import { CreateChildrenDto } from './dtos/CreateChildren.dto';
+import { CreateKidActivityDto } from './dtos/CreateKidActivity.dto';
 import { CreateSubscriptionDto } from './dtos/CreateSubscription.dto';
 import { CreateVideoForChildrenDto } from './dtos/CreateVideoForChildren.dto';
 import { CreateVideoHistoryDto } from './dtos/CreateVideoHistory.dto';
@@ -143,13 +144,18 @@ export class UsersController {
     return this.usersService.reSetTimeExpire();
   }
 
-  @Put(':userId/kid-activity/:childrenId')
-  updateKidActivity(@Param() par: any, @Body() body: UpdateKidActivityDto) {
-    return this.usersService.updateKidActivity(
-      par.userId,
-      par.childrenId,
-      body,
-    );
+  // @Put(':userId/kid-activity/:childrenId')
+  // updateKidActivity(@Param() par: any, @Body() body: UpdateKidActivityDto) {
+  //   return this.usersService.updateKidActivity(
+  //     par.userId,
+  //     par.childrenId,
+  //     body,
+  //   );
+  // }
+
+  @Patch(':userId/kid-activity')
+  createKidActivity(@Param() par: any, @Body() body: CreateKidActivityDto) {
+    return this.usersService.createKidActivity(par.userId, body);
   }
 
   @Patch(':userId/childrens/:childrenId/block-video')

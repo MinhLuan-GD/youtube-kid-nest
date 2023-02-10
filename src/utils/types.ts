@@ -47,14 +47,22 @@ export type UpdateMessageChatDetails = {
   text: string;
 };
 
-export type UpdateKidActivityDetails = {
+// export type UpdateKidActivityDetails = {
+//   name: string;
+//   picture: string;
+//   type: string;
+//   activity: UpdateActivityDetails;
+// };
+
+export type CreateKidActivityDetails = {
+  childrenId: string;
   name: string;
   picture: string;
   type: string;
-  activity: UpdateActivityDetails;
+  activity: CreateActivityDetails;
 };
 
-type UpdateActivityDetails = {
+type CreateActivityDetails = {
   content: string;
   videoId: string;
   channelId: string;

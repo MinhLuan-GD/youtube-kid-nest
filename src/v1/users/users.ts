@@ -1,11 +1,11 @@
 import {
   CreateChildrenDetails,
+  CreateKidActivityDetails,
   CreateSubscriptionDetails,
   CreateVideoForChildrenDetails,
   CreateVideoHistoryDetails,
   ModifyChildrenForChildrenDetails,
   ModifyChildrenForParentDetails,
-  UpdateKidActivityDetails,
   UserDetails,
 } from 'src/utils/types';
 import { Children } from './schemas/children.schema';
@@ -81,11 +81,11 @@ export interface IUsersService {
 
   reSetTimeExpire(): void;
 
-  updateKidActivity(
-    userId: string,
-    childrenId: string,
-    data: UpdateKidActivityDetails,
-  ): Promise<User>;
+  // updateKidActivity(
+  //   userId: string,
+  //   childrenId: string,
+  //   data: UpdateKidActivityDetails,
+  // ): Promise<User>;
 
   blockVideo(
     userId: string,
@@ -144,4 +144,9 @@ export interface IUsersService {
   ): Promise<{ children: Children; childrens: Children[] }>;
 
   getKidsActivity(userId: string): Promise<KidActivity[]>;
+
+  createKidActivity(
+    userId: string,
+    data: CreateKidActivityDetails,
+  ): Promise<User>;
 }

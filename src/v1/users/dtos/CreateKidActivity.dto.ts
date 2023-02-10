@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-class UpdateActivityDto {
+class CreateActivityDto {
   content: string;
 
   videoId: string;
@@ -12,12 +12,14 @@ class UpdateActivityDto {
   new_picture: string;
 }
 
-export class UpdateKidActivityDto {
+export class CreateKidActivityDto {
+  childrenId: string;
+
   name: string;
 
   picture: string;
 
   type: string;
 
-  activity: UpdateActivityDto;
+  activity: CreateActivityDto;
 }

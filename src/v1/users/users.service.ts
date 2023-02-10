@@ -3,12 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   CreateChildrenDetails,
+  CreateKidActivityDetails,
   CreateSubscriptionDetails,
   CreateVideoForChildrenDetails,
   CreateVideoHistoryDetails,
   ModifyChildrenForChildrenDetails,
   ModifyChildrenForParentDetails,
-  UpdateKidActivityDetails,
   UserDetails,
 } from 'src/utils/types';
 import { Children } from './schemas/children.schema';
@@ -320,45 +320,45 @@ export class UsersService implements IUsersService {
     return;
   }
 
-  async updateKidActivity(
-    userId: string,
-    childrenId: string,
-    data: UpdateKidActivityDetails,
-  ): Promise<User> {
-    const user = await this.usersModel
-      .findOneAndUpdate(
-        {
-          google_id: userId,
-          'kids_activity.childrenId': childrenId,
-        },
-        {
-          $set: {
-            'kids_activity.$.name': data.name,
-            'kids_activity.$.picture': data.picture,
-            'kids_activity.$.type': data.type,
-            'kids_activity.$.activity': data.activity,
-          },
-        },
-        { new: true },
-      )
-      .lean();
+  // async updateKidActivity(
+  //   userId: string,
+  //   childrenId: string,
+  //   data: UpdateKidActivityDetails,
+  // ): Promise<User> {
+  //   const user = await this.usersModel
+  //     .findOneAndUpdate(
+  //       {
+  //         google_id: userId,
+  //         'kids_activity.childrenId': childrenId,
+  //       },
+  //       {
+  //         $set: {
+  //           'kids_activity.$.name': data.name,
+  //           'kids_activity.$.picture': data.picture,
+  //           'kids_activity.$.type': data.type,
+  //           'kids_activity.$.activity': data.activity,
+  //         },
+  //       },
+  //       { new: true },
+  //     )
+  //     .lean();
 
-    if (!user) {
-      return this.usersModel
-        .findOneAndUpdate(
-          { google_id: userId },
-          {
-            $push: {
-              kids_activity: { childrenId, ...data },
-            },
-          },
-          { new: true },
-        )
-        .lean();
-    }
+  //   if (!user) {
+  //     return this.usersModel
+  //       .findOneAndUpdate(
+  //         { google_id: userId },
+  //         {
+  //           $push: {
+  //             kids_activity: { childrenId, ...data },
+  //           },
+  //         },
+  //         { new: true },
+  //       )
+  //       .lean();
+  //   }
 
-    return user;
-  }
+  //   return user;
+  // }
 
   async blockVideo(
     userId: string,
@@ -565,5 +565,23 @@ export class UsersService implements IUsersService {
       google_id: userId,
     });
     return kids_activity;
+  }
+
+  async createKidActivity(
+    userId: string,
+    data: CreateKidActivityDetails,
+  ): Promise<User> {
+    const user = await this.usersModel
+      .findOneAndUpdate(
+        { google_id: userId },
+        {
+          $push: {
+            kids_activity: data,
+          },
+        },
+        { new: true },
+      )
+      .lean();
+    return user;
   }
 }
