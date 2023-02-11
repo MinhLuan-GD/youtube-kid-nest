@@ -1,6 +1,27 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { PassportModule } from '@nestjs/passport';
+import { ScheduleModule } from '@nestjs/schedule';
+import { V1Module } from './v1/v1.module';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(`mongodb+srv://${process.env.DB_HOST}`, {
+      dbName: process.env.DB_NAME,
+      auth: {
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+      },
+      maxPoolSize: 8,
+      minPoolSize: 2,
+      family: 4,
+    }),
+    PassportModule.register({ session: true }),
+    ScheduleModule.forRoot(),
+    V1Module,
+  ],
 })
 export class AppModule {}
+//mongodb+srv://luan:<password>@cluster0.l2ssvan.mongodb.net/test
