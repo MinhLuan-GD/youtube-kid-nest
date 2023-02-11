@@ -12,7 +12,7 @@
     "GOOGLE_SECRET": "@google_secret",
     "SESSION_SECRET": "@session_secret"
   },
-  "build": [
+  "builds": [
     {
       "src": "src/main.ts",
       "use": "@vercel/node"
