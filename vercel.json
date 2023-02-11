@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "env": {
+    "BASE_URL": "@base_url",
+    "PORT": "@port",
+    "DB_HOST": "@db_host",
+    "DB_NAME": "@db_name",
+    "DB_USERNAME": "@db_username",
+    "DB_PASSWORD": "@db_password",
+    "ORIGIN": "@origin",
+    "GOOGLE_CLIENT_ID": "@google_client_id",
+    "GOOGLE_SECRET": "@google_secret",
+    "SESSION_SECRET": "@session_secret"
+  },
+  "build": [
+    {
+      "src": "src/main.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)*",
+      "dest": "src/main.ts",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    }
+  ]
+}

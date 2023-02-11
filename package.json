@@ -2,8 +2,7 @@
   "name": "youtube-kid-nest",
   "version": "1.0.6",
   "description": "",
-  "author": "",
-  "private": true,
+  "author": "luan",
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
