@@ -1,7 +1,6 @@
 import {
   Get,
   Post,
-  Put,
   Patch,
   Delete,
   Inject,
@@ -18,7 +17,6 @@ import { CreateVideoForChildrenDto } from './dtos/CreateVideoForChildren.dto';
 import { CreateVideoHistoryDto } from './dtos/CreateVideoHistory.dto';
 import { ModifyChildrenForChildrenDto } from './dtos/ModifyChildrenForChildren.dto';
 import { ModifyChildrenForParentDto } from './dtos/ModifyChildrenForParent.dto';
-import { UpdateKidActivityDto } from './dtos/UpdateKidActivity.dto';
 import { IUsersService } from './users';
 
 @Controller({ version: '1', path: Routes.USERS })
@@ -143,15 +141,6 @@ export class UsersController {
   reSetTimeExpire() {
     return this.usersService.reSetTimeExpire();
   }
-
-  // @Put(':userId/kid-activity/:childrenId')
-  // updateKidActivity(@Param() par: any, @Body() body: UpdateKidActivityDto) {
-  //   return this.usersService.updateKidActivity(
-  //     par.userId,
-  //     par.childrenId,
-  //     body,
-  //   );
-  // }
 
   @Patch(':userId/kid-activity')
   createKidActivity(@Param() par: any, @Body() body: CreateKidActivityDto) {
