@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateVideoForChildrenDto {
   videoId: string;
@@ -10,8 +10,5 @@ export class CreateVideoForChildrenDto {
   @IsString()
   title: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // type: string;
   duration: string;
 }

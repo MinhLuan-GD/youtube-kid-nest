@@ -13,6 +13,7 @@ class CreateActivityDto {
 }
 
 export class CreateKidActivityDto {
+  @IsString()
   childrenId: string;
 
   name: string;

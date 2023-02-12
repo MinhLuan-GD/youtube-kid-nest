@@ -8,7 +8,7 @@ import { V1Module } from './v1/v1.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(`mongodb+srv://${process.env.DB_HOST}`, {
+    MongooseModule.forRoot(process.env.DB_URL, {
       dbName: process.env.DB_NAME,
       auth: {
         username: process.env.DB_USERNAME,
@@ -24,4 +24,3 @@ import { V1Module } from './v1/v1.module';
   ],
 })
 export class AppModule {}
-//mongodb+srv://luan:<password>@cluster0.l2ssvan.mongodb.net/test

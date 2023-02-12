@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class ModifyChildrenForChildrenDto {
   name: string;
 
+  @IsString()
   picture: string;
 }

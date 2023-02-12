@@ -15,6 +15,7 @@ class UpdateActivityDto {
 export class UpdateKidActivityDto {
   name: string;
 
+  @IsString()
   picture: string;
 
   type: string;

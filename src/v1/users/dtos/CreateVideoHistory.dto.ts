@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateVideoHistoryDto {
   videoId: string;
@@ -7,6 +7,7 @@ export class CreateVideoHistoryDto {
 
   thumbnail: string;
 
+  @IsString()
   title: string;
 
   duration: string;
